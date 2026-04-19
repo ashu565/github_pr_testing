@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>PR Agent Test Target</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; }
+  section { border: 1px solid #ddd; border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; }
+  h2 { margin-top: 0; }
+  input, button { padding: 0.4rem 0.6rem; font-size: 0.95rem; }
+  input { border: 1px solid #ccc; border-radius: 4px; }
+  button { background: #2563eb; color: #fff; border: 0; border-radius: 4px; cursor: pointer; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .row { display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem; }
+  .msg { font-size: 0.85rem; margin-top: 0.5rem; }
+  .ok { color: #15803d; }
+  .err { color: #b91c1c; }
+  ul { padding-left: 1.2rem; }
+</style>
+</head>
+<body>
+<h1>PR Agent Test Target</h1>
+
+<section id="login-section">
+  <h2>Login</h2>
+  <div class="row">
+    <input id="email" placeholder="email" />
+    <input id="password" type="password" placeholder="password" />
+    <button id="login-btn">Login</button>
+  </div>
+  <div id="login-msg" class="msg"></div>
+</section>
+
+<section id="counter-section">
+  <h2>Counter</h2>
+  <div class="row">
+    <button id="decrement-btn">-</button>
+    <span id="counter-value" data-testid="counter-value">0</span>
+    <button id="increment-btn">+</button>
+    <button id="reset-btn">Reset</button>
+  </div>
+</section>
+
+<section id="todo-section">
+  <h2>Todo</h2>
+  <div class="row">
+    <input id="todo-input" placeholder="Add a task" />
+    <button id="add-todo-btn">Add</button>
+  </div>
+  <ul id="todo-list" data-testid="todo-list"></ul>
+  <div id="todo-msg" class="msg"></div>
+</section>
+
+<script>
+  // --- login ---
+  const email = document.getElementById('email');
+  const password = document.getElementById('password');
+  const loginBtn = document.getElementById('login-btn');
+  const loginMsg = document.getElementById('login-msg');
+
+  loginBtn.addEventListener('click', () => {
+    if (email.value === 'user@example.com' && password.value === 'password123') {
+      loginMsg.textContent = 'Welcome back!';
+      loginMsg.className = 'msg ok';
+    } else {
+      loginMsg.textContent = 'Invalid credentials';
+      loginMsg.className = 'msg err';
+    }
+  });
+
+  // --- counter ---
+  const counterValue = document.getElementById('counter-value');
+  let count = 0;
+  const render = () => { counterValue.textContent = String(count); };
+  document.getElementById('increment-btn').addEventListener('click', () => { count++; render(); });
+  document.getElementById('decrement-btn').addEventListener('click', () => { count--; render(); });
+  document.getElementById('reset-btn').addEventListener('click', () => { count = 0; render(); });
+
+  // --- todo ---
+  const todoInput = document.getElementById('todo-input');
+  const todoList = document.getElementById('todo-list');
+  const todoMsg = document.getElementById('todo-msg');
+  const addBtn = document.getElementById('add-todo-btn');
+
+  addBtn.addEventListener('click', () => {
+    const text = todoInput.value.trim();
+    if (!text) {
+      todoMsg.textContent = 'Task cannot be empty';
+      todoMsg.className = 'msg err';
+      return;
+    }
+    const li = document.createElement('li');
+    li.textContent = text;
+    todoList.appendChild(li);
+    todoInput.value = '';
+    todoMsg.textContent = '';
+  });
+</script>
+</body>
+</html>
